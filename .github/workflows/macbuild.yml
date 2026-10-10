@@ -6,22 +6,20 @@ on:
 jobs:
   build:
     name: Build macOS M1
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install mise
-        uses: jdx/mise-action@v2
-        with:
-          install: true
-          cache: true
+        uses: jdx/mise-action@v4
 
-      - name: Setup Xcode
-        uses: maxim-lobanov/setup-xcode@v1
-        with:
-          xcode-version: latest-stable
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode_26.0.app
+
+      - name: Fix Xcode package plugin validation
+        run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidatation -bool YES
 
       - name: Generate Xcode project with Tuist
         shell: bash
