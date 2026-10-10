@@ -30,34 +30,35 @@ jobs:
           xcodebuild -version
           swift -version
 
-        
       - name: Fix Xcode package plugin validation
         run: |
           defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
           defaults write com.apple.dt.Xcode IDESourceTreesHashAlgorithm -string "SHA256"
+          defaults write com.apple.dt.Xcode IDESkipSwiftPackagePluginValidation -bool YES
           killall -9 Xcode || true
-          sleep 2  # Give the system time to process the kills
-      
+          sleep 2
+
       - name: Generate Xcode project with Tuist
         shell: bash
         run: |
           mise install
           mise exec -- tuist install
           mise exec -- tuist generate
-      
+
       - name: Build for M1
         shell: bash
         run: |
-          # Reapply defaults before build to ensure they're active
           defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
           defaults write com.apple.dt.Xcode IDESourceTreesHashAlgorithm -string "SHA256"
-          
+          defaults write com.apple.dt.Xcode IDESkipSwiftPackagePluginValidation -bool YES
+
           xcodebuild build \
             -project Cork.xcodeproj \
             -scheme Cork \
             -configuration Release \
             -destination 'platform=macOS' \
             -derivedDataPath build \
+            -skipPackagePluginValidation \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGN_IDENTITY='' \
             DEVELOPMENT_TEAM='' \
