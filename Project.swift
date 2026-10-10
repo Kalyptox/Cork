@@ -8,11 +8,11 @@ let build: String = "146"
 func corkTarget(configureWithSelfCompiled: Bool) -> ProjectDescription.Target {
     var additionalCompilationConditions = [String]()
     if configureWithSelfCompiled {
-        additionalCompilationConditions.append ("SELF_COMPILED")
+        additionalCompilationConditions.append("SELF_COMPILED")
     }
-    
+
     let targetName = configureWithSelfCompiled ? "Self-Compiled" : "Cork"
-    
+
     return Target.target(
         name: targetName,
         destinations: [.mac],
@@ -23,14 +23,15 @@ func corkTarget(configureWithSelfCompiled: Bool) -> ProjectDescription.Target {
         infoPlist: .file(path: "Cork/Info.plist"),
         sources: [
             "Cork/**/*.swift",
-        ], resources: [
+        ],
+        resources: [
             "Cork/**/*.xcassets",
             "Cork/**/*.xcstrings",
             "PrivacyInfo.xcprivacy",
             "Cork/Logic/Helpers/Programs/Sudo Helper",
             "Cork/AppIcon.icon"
-        ], dependencies: [
-            // .target(name: "CorkHelp"),
+        ],
+        dependencies: [
             .target(corkSharedTarget),
             .target(corkNotificationsTarget),
             .target(corkModelsTarget),
@@ -43,9 +44,9 @@ func corkTarget(configureWithSelfCompiled: Bool) -> ProjectDescription.Target {
             .external(name: "ButtonKit"),
             .external(name: "FactoryKit"),
             .external(name: "Defaults"),
-            .external(name: "DefaultsMacros"),
             .package(product: "SwiftLintBuildToolPlugin", type: .plugin)
-        ], settings: .settings(configurations: [
+        ],
+        settings: .settings(configurations: [
             .debug(
                 name: "Debug",
                 settings: [:].swiftActiveCompilationConditions(["DEBUG"] + additionalCompilationConditions),
@@ -143,6 +144,7 @@ let corkTerminalFunctionsTarget: ProjectDescription.Target = .target(
         )
     ])
 )
+
 let corkTerminalFunctionsTestsTarget: ProjectDescription.Target = .target(
     name: "CorkTerminalFunctionsTests",
     destinations: [.mac],
@@ -156,7 +158,6 @@ let corkTerminalFunctionsTestsTarget: ProjectDescription.Target = .target(
         .target(corkTerminalFunctionsTarget)
     ],
 )
-
 
 let corkModelsTarget: ProjectDescription.Target = .target(
     name: "CorkModels",
@@ -178,7 +179,6 @@ let corkModelsTarget: ProjectDescription.Target = .target(
         .target(corkNotificationsTarget),
         .external(name: "FactoryKit"),
         .external(name: "Defaults"),
-        .external(name: "DefaultsMacros"),
     ],
     settings: .settings(configurations: [
         .debug(
@@ -231,7 +231,6 @@ let corkFeature_brewfiles: ProjectDescription.Target = .target(
         .target(corkModelsTarget),
         .external(name: "FactoryKit"),
         .external(name: "Defaults"),
-        .external(name: "DefaultsMacros"),
     ],
     settings: .settings(configurations: [
         .debug(
@@ -281,7 +280,7 @@ let corkTestsTarget: ProjectDescription.Target = .target(
 let project = Project(
     name: "Cork",
     options: .options(
-        automaticSchemesOptions: .enabled(runLanguage: "en"), 
+        automaticSchemesOptions: .enabled(runLanguage: "en"),
         developmentRegion: "en"
     ),
     packages: [
@@ -296,7 +295,6 @@ let project = Project(
         configurations: [
             .debug(
                 name: "Debug",
-//                settings: [:].swiftActiveCompilationConditions(["DEBUG"]),
                 xcconfig: .relativeToRoot("xcconfigs/Project.xcconfig")
             ),
             .release(
@@ -317,5 +315,4 @@ let project = Project(
         corkTestsTarget,
         corkTerminalFunctionsTestsTarget
     ]
-
 )
