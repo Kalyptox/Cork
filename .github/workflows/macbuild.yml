@@ -15,9 +15,11 @@ jobs:
       - name: Install mise
         uses: jdx/mise-action@v4
 
-      - name: Select Xcode
+      - name: Select stable Xcode
         shell: bash
         run: |
+          set -euo pipefail
+
           XCODE_PATH="$(/usr/bin/find /Applications -maxdepth 1 -type d -name 'Xcode*.app' | sort | tail -n 1)"
           if [ -z "$XCODE_PATH" ]; then
             echo "No Xcode.app found in /Applications" >&2
@@ -27,11 +29,14 @@ jobs:
           export DEVELOPER_DIR="$XCODE_PATH/Contents/Developer"
           echo "DEVELOPER_DIR=$DEVELOPER_DIR" >> "$GITHUB_ENV"
           sudo xcode-select --switch "$DEVELOPER_DIR"
+
           xcodebuild -version
           swift -version
 
       - name: Fix Xcode package plugin validation
+        shell: bash
         run: |
+          set -euo pipefail
           defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
           defaults write com.apple.dt.Xcode IDESourceTreesHashAlgorithm -string "SHA256"
           defaults write com.apple.dt.Xcode IDESkipSwiftPackagePluginValidation -bool YES
@@ -41,6 +46,7 @@ jobs:
       - name: Generate Xcode project with Tuist
         shell: bash
         run: |
+          set -euo pipefail
           mise install
           mise exec -- tuist install
           mise exec -- tuist generate
@@ -48,6 +54,8 @@ jobs:
       - name: Build for M1
         shell: bash
         run: |
+          set -euo pipefail
+
           defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
           defaults write com.apple.dt.Xcode IDESourceTreesHashAlgorithm -string "SHA256"
           defaults write com.apple.dt.Xcode IDESkipSwiftPackagePluginValidation -bool YES
