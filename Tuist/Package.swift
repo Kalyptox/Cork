@@ -23,7 +23,7 @@ let package = Package(
         // .package(url: "https://github.com/Alamofire/Alamofire", from: "5.0.0"),
         // You can read more about dependencies here: https://docs.tuist.io/documentation/tuist/dependencies
         .package(url: "https://github.com/sindresorhus/LaunchAtLogin-Modern", .upToNextMajor(from: "1.0.0")),
-        .package(url: "https://github.com/sindresorhus/Defaults", .upToNextMajor(from: "9.1.0")),
+        .package(url: "https://github.com/sindresorhus/Defaults", .upToNextMajor(from: "9.0.9")),
         .package(url: "https://github.com/buresdv/DavidFoundation", .upToNextMajor(from: "2.0.1")),
         .package(url: "https://github.com/buresdv/BetterProgress", .upToNextMinor(from: "1.2.1")),
         .package(url: "https://github.com/buresdv/ApplicationInspector", .upToNextMajor(from: "1.0.0")),
