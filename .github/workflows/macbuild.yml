@@ -31,7 +31,10 @@ jobs:
           swift -version
 
       - name: Fix Xcode package plugin validation
-        run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
+        run: |
+          defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
+          defaults write com.apple.dt.Xcode IDESourceTreesHashAlgorithm -string "SHA256"
+          killall -9 Xcode || true
 
       - name: Generate Xcode project with Tuist
         shell: bash
