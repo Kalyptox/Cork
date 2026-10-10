@@ -35,7 +35,9 @@ jobs:
           xcodebuild -version
 
       - name: Fix plugins
-        run: defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
+        run: |
+          defaults write com.apple.dt.Xcode IDESkipPackagePluginFingerprintValidation -bool YES
+          defaults write com.apple.dt.Xcode IDESkipMacroValidation -bool YES
 
       - run: tuist install
       - run: tuist test Cork
